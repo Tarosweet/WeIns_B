@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public class LabelDaoImpl implements LabelDao {
 
-
     @Autowired
     private LabelRepository labelRepository;
 
@@ -30,7 +29,6 @@ public class LabelDaoImpl implements LabelDao {
 
         // insert new
         if (label.getId() == null) {
-            System.out.println("insert new");
             Label label1 = labelRepository.findByContent(label.getContent());
 
             // exists and deleted, set non-deleted
@@ -39,9 +37,8 @@ public class LabelDaoImpl implements LabelDao {
                     label1.setFlag(0);
                     labelRepository.save(label1);
                 }
-                else {
-                    return "exits";
-                }
+                else
+                    return "existed";
             }
 
             else
@@ -52,34 +49,36 @@ public class LabelDaoImpl implements LabelDao {
 
         // update
         else {
-            labelRepository.save(label);
-            return "update";
-        }
-    }
+            Label label1 = labelRepository.findByContent(label.getContent());
 
-    @Override
-    public String update(Label label) {
-        return save(label);
+            if (label1 != null)
+                return "existed";
+
+            else {
+                labelRepository.save(label);
+                return "update";
+            }
+        }
     }
 
     @Override
     public void deleteById(Integer id) {
         Label label = labelRepository.getOne(id);
 
-        if (label.getFlag() == 1)
+        if (label == null || label.getFlag() == 1)
             return;
 
         label.setFlag(1);
-        save(label);
+        labelRepository.save(label);
     }
 
     @Override
     public void deleteByContent(String content) {
         Label label = labelRepository.findByContent(content);
 
-        if (label != null && label.getFlag() == 1) {
+        if (label != null && label.getFlag() == 0) {
             label.setFlag(1);
-            save(label);
+            labelRepository.save(label);
         }
     }
 

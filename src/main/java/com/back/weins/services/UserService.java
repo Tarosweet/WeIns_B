@@ -17,15 +17,15 @@ public interface UserService {
 
     String save(User user);
 
-    String update(RegisterUtil registerUtil);
+    String update(RegisterUtil registerUtil, List<User> Test);
 
     void delete(Integer id);
 
-    String register(RegisterUtil registerUtil);
+    String register(RegisterUtil registerUtil, List<User> Test);
 
-    User login(String phone, String password);
+    User login(String phone, String password, User Test);
 
-    void follow_relation(Integer sub, Integer obj, Integer flag);
+    void follow_relation(Integer sub, Integer obj, Integer flag, List<User> Test);
 
-    String auth(Integer sub, Integer obj, Integer target);
+    String auth(Integer sub, Integer obj, Integer target, List<User> Test);
 }
